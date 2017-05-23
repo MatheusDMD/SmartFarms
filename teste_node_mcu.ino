@@ -6,12 +6,15 @@
 #include "ESP8266WiFi.h"
 
 #define DHTTYPE DHT11   // DHT 22  (AM2302), AM2321
-#define DHTPIN  12
 #define LED_PIN 13
+
+int sensorPin = 0;    // select the input pin for the potentiometer
+int sensorValue = 0;  // variable to store the value coming from the sensor
+ 
+int sensorVCC = 13;
 
 const char* ssid = "Marotzke";
 const char* password = "12345678";
-DHT dht(DHTPIN, DHTTYPE);
 
 void setup(void)
 {
@@ -20,6 +23,9 @@ void setup(void)
   pinMode(LED_PIN, OUTPUT);
   dht.begin();
   WiFi.begin(ssid, password);
+  
+   pinMode(sensorVCC, OUTPUT); 
+   digitalWrite(sensorVCC, LOW);
 
   // while wifi not connected yet, print '.'
   // then after it connected, get out of the loop
@@ -36,20 +42,25 @@ void setup(void)
 void loop() {
   digitalWrite(LED_PIN, LOW);
   delay(1000);
-  float t = dht.readTemperature();
-  float h = dht.readHumidity();
-  String data = "temperature=" + String(t) + "&humidity=" + String(h);
-  
+
+  // power the sensor
+  digitalWrite(sensorVCC, HIGH);
+  delay(100); //make sure the sensor is powered
+  // read the value from the sensor:
+  sensorValue = analogRead(sensorPin); 
+  //stop power 
+  digitalWrite(sensorVCC, LOW);  
+ 
   HTTPClient http;
-  http.begin("http://192.168.43.33:5000/set/"+String(t)+"/"+String(h));
-  http.GET();//"temp="+ String(t) +"&hum="+ String(h));
+  http.begin("http://192.168.43.33:5000/set/"+String(sensorValue));
+  http.GET();
   digitalWrite(LED_PIN, HIGH);
   delay(200);
   Serial.println(http.getString());
   http.end();
-  
-  Serial.print("Humidity (%): ");
-  Serial.println(h);
-  Serial.print("Temperature (°C): ");
-  Serial.println(t);
+
+  //wait
+  delay(5*1000);          
+  Serial.print("Soil Humidity = " );                       
+  Serial.println(sensorValue);  
 }
