@@ -162,7 +162,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="#myPage">SF</a>
+      <a class="navbar-brand" href="#myPage"><img src="leaf.png" style="width:50%"></a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
@@ -188,12 +188,27 @@
       <script>
       function myMap() {
       var mapProp= {
-          mapTypeId: google.maps.MapTypeId.SATELLITE,
-          center:new google.maps.LatLng(-15.5859169,-46.4952533),
-          zoom:15,
-
+        mapTypeId: google.maps.MapTypeId.SATELLITE,
+        center:new google.maps.LatLng(-23.6152824,-47.1804637),
+        zoom:18,
       };
+
+
       var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+      var infowindow = new google.maps.InfoWindow({
+        content: "Sensor Location"
+      });
+
+      var marker = new google.maps.Marker({
+        position: {lat: -23.61571, lng: -47.1794659},
+        icon: "spot2.png",
+        map: map,
+      });
+
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
       }
       </script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAo2hNIFBZ9r8jtnmvXHFO56ff_8r5pjL4&callback=myMap"></script>

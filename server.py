@@ -31,7 +31,6 @@ def login():
 		# 	print('login negado')
 		# 	return render_template('smartfarm_home.html')
 	else:
-		print("olé")
 		return render_template('smartfarm_home.html')
 
 # @socketio.on('value changed')
