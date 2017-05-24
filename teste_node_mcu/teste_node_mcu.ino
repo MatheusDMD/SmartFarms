@@ -1,17 +1,12 @@
 #include <ESP8266HTTPClient.h>
-
-#include <DHT_U.h>
-
-#include <DHT.h>
 #include "ESP8266WiFi.h"
 
-#define DHTTYPE DHT11   // DHT 22  (AM2302), AM2321
 #define LED_PIN 13
 
 int sensorPin = 0;    // select the input pin for the potentiometer
 int sensorValue = 0;  // variable to store the value coming from the sensor
  
-int sensorVCC = 13;
+int sensorVCC = 12;
 
 const char* ssid = "Marotzke";
 const char* password = "12345678";
@@ -21,7 +16,6 @@ void setup(void)
   Serial.begin(9600);
   // Connect to WiFi
   pinMode(LED_PIN, OUTPUT);
-  dht.begin();
   WiFi.begin(ssid, password);
   
    pinMode(sensorVCC, OUTPUT); 
@@ -52,7 +46,7 @@ void loop() {
   digitalWrite(sensorVCC, LOW);  
  
   HTTPClient http;
-  http.begin("http://192.168.43.33:5000/set/"+String(sensorValue));
+  http.begin("http://192.168.43.84:5000/set/"+String(sensorValue));
   http.GET();
   digitalWrite(LED_PIN, HIGH);
   delay(200);
