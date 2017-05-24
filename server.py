@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request
-# from flask.ext.socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-# socketio = SocketIO(app)
+socketio = SocketIO(app)
 
 dic_farm = {'rachelpbm@gmail.com': 123456, 'matheus_dmd@gmail.com': 123456, 'gabi_almeida@gail.com' : 123456}
 cord_lat = -23.61571
 cord_lng = -47.1794659
 sensor_location = "Plantação de soja"
-sensor_humidity = "70%"
+sensor_humidity = 70
 
 def __init__(self, email, password):
     self.email = email
@@ -37,11 +37,19 @@ def login():
 	else:
 		return render_template('smartfarm_home.html')
 
-# @socketio.on('value changed')
-# def value_changed(message):
-#     values[message['who']] = message['data']
-#     emit('update value', message, broadcast=True)
+@socketio.on('value changed')
+def value_changed(message):
+    sensor_humidity[message['who']] = message['data']
+    socketio.emit('update value', message, broadcast=True)
+
+@app.route('/set',methods=['POST','GET'])
+def set_values():
+    global sensor_humidity
+    sensor_humidity = int(request.args.get('hum'))
+    socketio.emit('value changed', {"who":"humidity", "data": sensor_humidity})
+    print(sensor_humidity)
+    return "ok"
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0')
-#    socketio.run(app, host='0.0.0.0')
+	# app.run(host='0.0.0.0')
+    socketio.run(app) #, host='0.0.0.0')

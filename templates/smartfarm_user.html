@@ -9,6 +9,28 @@
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function(){
+
+        var socket = io.connect();
+
+        socket.on('connect', function() {
+            socket.emit('connect', {data: 'I\'m connected!'});
+        });
+
+        $('input.sync').on('input', function(event) {
+                socket.emit('value changed', {who: $(this).attr('id'), data: $(this).val()});
+                return false;
+        });
+
+        socket.on('update value', function(msg) {
+            $('input#'+msg.who).val(msg.data)
+        });
+
+    });
+  </script>
   <style>
   body {
       font: 400 15px Lato, sans-serif;
@@ -202,7 +224,7 @@
 
       var marker = new google.maps.Marker({
         position: {lat: {{lat}}, lng: {{lng}}},
-        icon: "spot2.png",
+        //icon: "spot2.png",
         map: map,
       });
 
@@ -217,7 +239,8 @@
     <h3 class="text-center">{{location}}</h3>
     <div class="well">
       <h4>Data</h4>
-      <p> Humidity:{{humidity}}</p>
+      <p>Humidity: </p>
+      <p id="humidity" class="sync">{{humidity}}</p>
       <!-- <p> Temperature:</p> -->
     </div>
     <div class="well">
