@@ -167,7 +167,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#yourfarm">YOUR FARM</a></li>
-        <li><a href="#">LOGOUT</a></li>
+        <li><a href="">LOGOUT</a></li>
       </ul>
     </div>
   </div>
@@ -197,11 +197,11 @@
       var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
       var infowindow = new google.maps.InfoWindow({
-        content: "Sensor Location"
+        content: "{{location}}"
       });
 
       var marker = new google.maps.Marker({
-        position: {lat: -23.61571, lng: -47.1794659},
+        position: {lat: {{lat}}, lng: {{lng}}},
         icon: "spot2.png",
         map: map,
       });
@@ -214,11 +214,11 @@
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAo2hNIFBZ9r8jtnmvXHFO56ff_8r5pjL4&callback=myMap"></script>
     </div>
     <div class="col-sm-4">
-    <h3 class="text-center">Sensor Location</h3>
+    <h3 class="text-center">{{location}}</h3>
     <div class="well">
       <h4>Data</h4>
-      <p> Humidity:</p>
-      <p> Temperature:</p>
+      <p> Humidity:{{humidity}}</p>
+      <!-- <p> Temperature:</p> -->
     </div>
     <div class="well">
        <h4>Graph</h4>

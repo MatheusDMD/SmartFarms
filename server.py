@@ -5,10 +5,14 @@ app = Flask(__name__)
 # socketio = SocketIO(app)
 
 dic_farm = {'rachelpbm@gmail.com': 123456, 'matheus_dmd@gmail.com': 123456, 'gabi_almeida@gail.com' : 123456}
+cord_lat = -23.61571
+cord_lng = -47.1794659
+sensor_location = "Plantação de soja"
+sensor_humidity = "70%"
 
 def __init__(self, email, password):
-        self.email = email
-        self.password = password
+    self.email = email
+    self.password = password
 
 @app.route('/')
 def index():
@@ -25,7 +29,7 @@ def login():
 		
 		# if dic_farm[email] == password:
 		# 	print('sucesso no login')
-		return render_template('smartfarm_user.html')
+		return render_template('smartfarm_user.html', lat= cord_lat, lng = cord_lng, location=sensor_location, humidity=sensor_humidity )
 
 		# else:
 		# 	print('login negado')
