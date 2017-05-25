@@ -226,6 +226,14 @@
         content: "{{location}}"
       });
 
+      var infowindow2 = new google.maps.InfoWindow({
+        content: "Soja da Gabi"
+      });
+
+      var infowindow3 = new google.maps.InfoWindow({
+        content: "Café da Rachel"
+      });
+
       var marker = new google.maps.Marker({
         position: {lat: {{lat}}, lng: {{lng}}},
         icon: "/static/spot2.png",
@@ -233,13 +241,27 @@
       });
 
       var marker2 = new google.maps.Marker({
-        position: {lat: -23.6153021, lng: -47.1813542},
+        position: {lat: -23.6153118, lng: -47.1808928},
+        icon: "/static/spot2.png",
+        map: map,
+      });
+
+      var marker3 = new google.maps.Marker({
+        position: {lat: -23.6147859, lng: -47.1802706},
         icon: "/static/spot2.png",
         map: map,
       });
 
       marker.addListener('click', function() {
         infowindow.open(map, marker);
+      });
+
+      marker2.addListener('click', function() {
+        infowindow2.open(map, marker2);
+      });
+
+      marker3.addListener('click', function() {
+        infowindow3.open(map, marker3);
       });
 
 
@@ -261,6 +283,7 @@
   			evtSrc.onmessage = function(e) {
           var array = e.data.split(",");
   				eventOutputContainer.innerHTML = "humidity : " + array[0];
+          if(array[1 ]== "1"){
             eventOutputContainer2.innerHTML = "Active"; 
             eventOutputContainer2.style.color = "#01b722";
           }else{
