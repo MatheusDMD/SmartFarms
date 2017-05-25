@@ -8,8 +8,10 @@ app = Flask(__name__)
 dic_farm = {'rachelpbm@gmail.com': 123456, 'matheus_dmd@gmail.com': 123456, 'gabi_almeida@gail.com' : 123456}
 cord_lat = -23.61571
 cord_lng = -47.1794659
-sensor_location = "Plantacao de soja"
+sensor_location = "Bonsai do Dias"
 sensor_humidity = 70
+irrigation_status = "0"
+humidity_values = []
 
 def __init__(self, email, password):
 	self.email = email
@@ -46,18 +48,26 @@ def login():
 #
 @app.route('/set',methods=['GET'])
 def set_values():
-	global sensor_humidity
-	sensor_humidity = int(request.args.get('hum'))
-	return "hello"
-
-
+	global sensor_humidity, irrigation_status, humidity_values
+	sensor_humidity = request.args.get('hum')
+	if int(sensor_humidity) > 900:
+		humidity_values.append(sensor_humidity)
+		if len(humidity_values)>5:
+			irrigation_status = "1"
+			return "1"
+	else:
+		humidity_values = []
+	irrigation_status = "0"
+	return "0"
+ 
 @app.route("/stream")
 def subscribe():
 	def gen():
 		while True:
-			global sensor_humidity
+			global sensor_humidity,irrigation_status
 			time.sleep(1)
-			result = "data: {}\n\n".format(sensor_humidity)
+			print(irrigation_status)
+			result = "data: {0},{1}\n\n".format(sensor_humidity, irrigation_status)
 			yield result
 	return Response(gen(), mimetype="text/event-stream")
 #

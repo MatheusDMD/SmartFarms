@@ -232,9 +232,17 @@
         map: map,
       });
 
+      var marker2 = new google.maps.Marker({
+        position: {lat: -23.6153021, lng: -47.1813542},
+        icon: "/static/spot2.png",
+        map: map,
+      });
+
       marker.addListener('click', function() {
         infowindow.open(map, marker);
       });
+
+
       }
       </script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAo2hNIFBZ9r8jtnmvXHFO56ff_8r5pjL4&callback=myMap"></script>
@@ -245,11 +253,22 @@
       <h4>Data</h4>
       <!-- <p>Humidity: </p> -->
       <span id="humidity"> humidity : </span>
+      <p id="status"> Inactive </p>
       <script type="text/javascript">
   			var eventOutputContainer = document.getElementById("humidity");
+        var eventOutputContainer2 = document.getElementById("status");
   			var evtSrc = new EventSource("/stream");
   			evtSrc.onmessage = function(e) {
-  				eventOutputContainer.innerHTML = "humidity : " + e.data;
+          var array = e.data.split(",");
+  				eventOutputContainer.innerHTML = "humidity : " + array[0];
+            eventOutputContainer2.innerHTML = "Active"; 
+            eventOutputContainer2.style.color = "#01b722";
+          }else{
+            eventOutputContainer2.innerHTML = "Inactive";
+            eventOutputContainer2.style.color = "#b70000";
+          }
+          
+
   			};
 		</script>
       <!-- <p> Temperature:</p> -->
